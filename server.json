@@ -1,0 +1,28 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "ai.scrapewise/scrapewise",
+  "title": "Scrapewise",
+  "description": "Scrape, clean and match product and price data from any website",
+  "version": "0.1.0",
+  "websiteUrl": "https://scrapewise.ai/mcp",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mcp.scrapewise.ai/mcp",
+      "headers": [
+        {
+          "name": "Authorization",
+          "description": "Bearer <your Scrapewise API key from Settings > API Keys>",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ],
+  "_meta": {
+    "io.modelcontextprotocol.registry/publisher-provided": {
+      "canonicalSource": "https://scrapewise.ai/server.json is the authority for this manifest. It is generated from config/mcp.mjs in the scrapewise.ai site repo and validated by test/mcp-package.test.ts. Any other copy of this file is a mirror.",
+      "namespaceVerification": "https://scrapewise.ai/.well-known/mcp-registry-auth"
+    }
+  }
+}

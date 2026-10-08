@@ -3,10 +3,12 @@
 Scrape, clean and match product and price data from any website — from inside your AI agent.
 
 ScrapeWise runs a hosted [Model Context Protocol](https://modelcontextprotocol.io) server. You
-point your MCP client at one URL, add your API key, and your agent can build scrapers, run them,
-and read the results back as structured data.
+point your MCP client at one URL and add your API key. Your agent can then find local businesses,
+search Google and Amazon, fetch web pages and read the rows saved in your account. Add
+`?toolsets=outcome,admin` to the URL and it also builds and runs scrapers.
 
 - **Endpoint:** `https://mcp.scrapewise.ai/mcp`
+- **Endpoint with the setup tools (to build scrapers):** `https://mcp.scrapewise.ai/mcp?toolsets=outcome,admin`
 - **Transport:** Streamable HTTP
 - **Registry name:** `ai.scrapewise/scrapewise` ([official MCP registry](https://registry.modelcontextprotocol.io))
 - **Auth:** `Authorization: Bearer <your API key>`
@@ -24,10 +26,28 @@ one. Pricing is pay-as-you-go.
 
 Replace `YOUR_SCRAPEWISE_API_KEY` in every snippet below.
 
+These snippets connect to the short list of data tools. To build scrapers as well, use this address
+in the same place:
+
+```
+https://mcp.scrapewise.ai/mcp?toolsets=outcome,admin
+```
+
+An account that gets its first MCP key now sees only the short list at the bare address. Accounts
+that still hold an older MCP key keep every tool. The choice is read when the session starts, so
+reconnect after changing it. Spell it `toolsets`: a misspelt switch is ignored without an error.
+
 ### Claude Code
 
 ```bash
 claude mcp add scrapewise --transport http https://mcp.scrapewise.ai/mcp \
+  --header 'Authorization: Bearer YOUR_SCRAPEWISE_API_KEY'
+```
+
+With the setup tools. The single quotes are needed: in zsh an unquoted `?` breaks the command.
+
+```bash
+claude mcp add scrapewise --transport http 'https://mcp.scrapewise.ai/mcp?toolsets=outcome,admin' \
   --header 'Authorization: Bearer YOUR_SCRAPEWISE_API_KEY'
 ```
 
@@ -96,6 +116,16 @@ and the name `scrapewise`.
 
 | Area | What it covers |
 | --- | --- |
+| Find | Local businesses from Google Maps: name, address, phone, website, rating (up to 20 per call) |
+| Search | Google web, news and shopping results; Amazon search results; Google Trends over time |
+| Fetch | The text or HTML of one public web page |
+| Follow | Long jobs: progress, rows, cancel |
+| Read | The groups in your account and the rows saved in them |
+
+### With the setup tools (`?toolsets=outcome,admin`)
+
+| Area | What it covers |
+| --- | --- |
 | Build | Preview a page, create a scraper from a URL or a cURL command, define the columns to extract |
 | Organise | Group scrapers by project, add product URLs to a scraper's link list, share groups |
 | Run | Run one scraper, a whole group, or an ad-hoc list of URLs; stop a run; read run errors |
@@ -106,8 +136,20 @@ and the name `scrapewise`.
 ## Tools
 
 The server advertises its own tool list once connected, so this is a reference rather than the
-source of truth. What a given API key sees can differ. Full documentation at
-[docs.scrapewise.ai](https://docs.scrapewise.ai).
+source of truth. What a given API key sees can differ — by the address you connect to, and by the
+key's own access level. Full documentation at [docs.scrapewise.ai](https://docs.scrapewise.ai).
+
+**Default tools (an account's first key)**
+
+`find_local_businesses` · `google_search` · `search_amazon` · `google_trends` · `fetch_page` ·
+`get_results` · `cancel_job` · `scrapewise_get_scraper_group_list` ·
+`scrapewise_get_scraper_data_group_client`
+
+Every paid tool states its price and takes `quote_only: true`, which returns the price and the
+wallet balance without spending anything. A read-only key (LLM_READ) lists only `get_results` and
+the two read tools; the paid tools and building need a full-access key (LLM_FULL).
+
+### Setup tools (listed with `?toolsets=admin` or `?toolsets=outcome,admin`)
 
 **Build a scraper**
 
@@ -185,9 +227,9 @@ source of truth. What a given API key sees can differ. Full documentation at
 ## Manifest
 
 [`server.json`](./server.json) is a mirror. The authority is
-[`https://scrapewise.ai/server.json`](https://scrapewise.ai/server.json), which is generated from
-the ScrapeWise site repo and checked by its test suite. If the two ever disagree, the hosted one
-is right.
+[`https://scrapewise.ai/server.json`](https://scrapewise.ai/server.json), which is served from the
+ScrapeWise site repo and checked by its test suite. If the two ever disagree, the hosted one is
+right.
 
 Namespace ownership for `ai.scrapewise/*` is proved by the Ed25519 public key published at
 [`https://scrapewise.ai/.well-known/mcp-registry-auth`](https://scrapewise.ai/.well-known/mcp-registry-auth).

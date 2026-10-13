@@ -3,8 +3,9 @@
 Scrape, clean and match product and price data from any website — from inside your AI agent.
 
 ScrapeWise runs a hosted [Model Context Protocol](https://modelcontextprotocol.io) server. You
-point your MCP client at one URL and add your API key. Your agent can then find local businesses,
-search Google and Amazon, fetch web pages and read the rows saved in your account. Add
+point your MCP client at one URL and add your API key. Your agent can then read product and price
+data from any shop or from Amazon, find local businesses, search Google and Amazon, fetch web pages
+and read the rows saved in your account. Add
 `?toolsets=outcome,admin` to the URL and it also builds and runs scrapers.
 
 - **Endpoint:** `https://mcp.scrapewise.ai/mcp`
@@ -116,6 +117,8 @@ and the name `scrapewise`.
 
 | Area | What it covers |
 | --- | --- |
+| Products | Product rows from any shop: name, price, currency, availability, brand, SKU/GTIN/EAN, images, description, rating. Amazon product pages, optionally with every seller's price, condition and delivery |
+| Clean | Tidy rows you already have: add EUR prices and price per kg/litre/piece, trim text, drop duplicates. Free — nothing is fetched |
 | Find | Local businesses from Google Maps: name, address, phone, website, rating (up to 20 per call) |
 | Search | Google web, news and shopping results; Amazon search results; Google Trends over time |
 | Fetch | The text or HTML of one public web page |
@@ -141,13 +144,15 @@ key's own access level. Full documentation at [docs.scrapewise.ai](https://docs.
 
 **Default tools (an account's first key)**
 
-`find_local_businesses` · `google_search` · `search_amazon` · `google_trends` · `fetch_page` ·
-`get_results` · `cancel_job` · `scrapewise_get_scraper_group_list` ·
-`scrapewise_get_scraper_data_group_client`
+`get_product_data` · `get_amazon_product` · `clean_product_data` · `find_local_businesses` ·
+`google_search` · `search_amazon` · `google_trends` · `fetch_page` · `get_results` · `cancel_job` ·
+`scrapewise_get_scraper_group_list` · `scrapewise_get_scraper_data_group_client`
 
 Every paid tool states its price and takes `quote_only: true`, which returns the price and the
-wallet balance without spending anything. A read-only key (LLM_READ) lists only `get_results` and
-the two read tools; the paid tools and building need a full-access key (LLM_FULL).
+wallet balance without spending anything. `clean_product_data` is free — it works on rows you
+already have and fetches nothing. A read-only key (LLM_READ) lists only the free tools —
+`get_results`, `clean_product_data` and the two read tools; the paid tools and building need a
+full-access key (LLM_FULL).
 
 ### Setup tools (listed with `?toolsets=admin` or `?toolsets=outcome,admin`)
 

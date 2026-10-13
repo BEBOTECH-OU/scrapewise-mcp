@@ -3,8 +3,13 @@
   "name": "ai.scrapewise/scrapewise",
   "title": "Scrapewise",
   "description": "Scrape, clean and match product and price data from any website",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "websiteUrl": "https://scrapewise.ai/mcp",
+  "repository": {
+    "url": "https://github.com/BEBOTECH-OU/scrapewise-mcp",
+    "source": "github",
+    "id": "1407868831"
+  },
   "remotes": [
     {
       "type": "streamable-http",

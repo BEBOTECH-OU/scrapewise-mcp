@@ -2,10 +2,13 @@
 
 ScrapeWise turns any website into clean, matched, AI-ready product data.
 
-ScrapeWise runs a hosted [Model Context Protocol](https://modelcontextprotocol.io) server. Point
-your MCP client at one address and add your API key. Your agent can then read product and price
-data from any shop or from Amazon, find local businesses, search Google and Amazon, fetch web pages,
-read the rows saved in your account and, with a Full key, build and run scrapers.
+Clean, matched, AI-ready product data from any website, served by a hosted
+[Model Context Protocol](https://modelcontextprotocol.io) server. Point your MCP client at one
+address and add your API key. Your agent can then read clean product and price data from any shop
+or from Amazon, see the same product matched across shops, search Google and Amazon, fetch web
+pages, read the rows saved in your account and, with a Full key, build and run scrapers.
+
+**Categories:** Web Scraping, Price Monitoring, Product Data, E-commerce
 
 [![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=scrapewise&config=eyJ1cmwiOiJodHRwczovL21jcC5zY3JhcGV3aXNlLmFpL21jcCIsImhlYWRlcnMiOnsiQXV0aG9yaXphdGlvbiI6IkJlYXJlciBZT1VSX1NDUkFQRVdJU0VfQVBJX0tFWSJ9fQ%3D%3D)
 [![Add to VS Code](https://img.shields.io/badge/VS_Code-Add_ScrapeWise-0098FF?logo=visualstudiocode&logoColor=white)](https://vscode.dev/redirect/mcp/install?name=scrapewise&config=%7B%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fmcp.scrapewise.ai%2Fmcp%22%2C%22headers%22%3A%7B%22Authorization%22%3A%22Bearer%20YOUR_SCRAPEWISE_API_KEY%22%7D%7D)

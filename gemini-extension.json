@@ -1,0 +1,21 @@
+{
+  "name": "scrapewise",
+  "version": "0.1.2",
+  "description": "Clean, matched, AI-ready product data from any website",
+  "settings": [
+    {
+      "name": "ScrapeWise API key",
+      "description": "Your key from Settings > API Keys at scrapewise.ai (Read or Full)",
+      "envVar": "SCRAPEWISE_API_KEY",
+      "sensitive": true
+    }
+  ],
+  "mcpServers": {
+    "scrapewise": {
+      "httpUrl": "https://mcp.scrapewise.ai/mcp",
+      "headers": {
+        "Authorization": "Bearer ${SCRAPEWISE_API_KEY}"
+      }
+    }
+  }
+}

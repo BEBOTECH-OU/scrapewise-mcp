@@ -2,8 +2,8 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "ai.scrapewise/scrapewise",
   "title": "Scrapewise",
-  "description": "Scrape, clean and match product and price data from any website",
-  "version": "0.1.1",
+  "description": "Clean, matched, AI-ready product data from any website",
+  "version": "0.1.2",
   "websiteUrl": "https://scrapewise.ai/mcp",
   "repository": {
     "url": "https://github.com/BEBOTECH-OU/scrapewise-mcp",

@@ -1,54 +1,45 @@
 # ScrapeWise MCP Server
 
-Scrape, clean and match product and price data from any website — from inside your AI agent.
+ScrapeWise turns any website into clean, matched, AI-ready product data.
 
-ScrapeWise runs a hosted [Model Context Protocol](https://modelcontextprotocol.io) server. You
-point your MCP client at one URL and add your API key. Your agent can then read product and price
-data from any shop or from Amazon, find local businesses, search Google and Amazon, fetch web pages
-and read the rows saved in your account. Add
-`?toolsets=outcome,admin` to the URL and it also builds and runs scrapers.
+ScrapeWise runs a hosted [Model Context Protocol](https://modelcontextprotocol.io) server. Point
+your MCP client at one address and add your API key. Your agent can then read product and price
+data from any shop or from Amazon, find local businesses, search Google and Amazon, fetch web pages,
+read the rows saved in your account and, with a Full key, build and run scrapers.
+
+[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=scrapewise&config=eyJ1cmwiOiJodHRwczovL21jcC5zY3JhcGV3aXNlLmFpL21jcCIsImhlYWRlcnMiOnsiQXV0aG9yaXphdGlvbiI6IkJlYXJlciBZT1VSX1NDUkFQRVdJU0VfQVBJX0tFWSJ9fQ%3D%3D)
+[![Add to VS Code](https://img.shields.io/badge/VS_Code-Add_ScrapeWise-0098FF?logo=visualstudiocode&logoColor=white)](https://vscode.dev/redirect/mcp/install?name=scrapewise&config=%7B%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fmcp.scrapewise.ai%2Fmcp%22%2C%22headers%22%3A%7B%22Authorization%22%3A%22Bearer%20YOUR_SCRAPEWISE_API_KEY%22%7D%7D)
+
+After the one-click install, replace `YOUR_SCRAPEWISE_API_KEY` with your own key.
 
 - **Endpoint:** `https://mcp.scrapewise.ai/mcp`
-- **Endpoint with the setup tools (to build scrapers):** `https://mcp.scrapewise.ai/mcp?toolsets=outcome,admin`
 - **Transport:** Streamable HTTP
-- **Registry name:** `ai.scrapewise/scrapewise` ([official MCP registry](https://registry.modelcontextprotocol.io))
 - **Auth:** `Authorization: Bearer <your API key>`
+- **Registry name:** `ai.scrapewise/scrapewise` ([official MCP registry](https://registry.modelcontextprotocol.io))
 - **Docs:** [scrapewise.ai/mcp](https://scrapewise.ai/mcp)
 
 This repository holds the connection manifest and the per-client config for that server. The
-server itself is hosted — there is nothing here to install or run.
+server itself is hosted, so there is nothing here to install or run.
 
 ## Get an API key
 
-Sign up at [scrapewise.ai](https://scrapewise.ai), then go to **Settings → API Keys** and create
-one. Pricing is pay-as-you-go.
+Sign up at [scrapewise.ai](https://scrapewise.ai), then go to **Settings > API Keys**. Pricing is
+pay-as-you-go.
+
+Your key decides what your agent can do. There is one address for every key.
+
+- **Read key (`LLM_READ`)** can read your groups, scrapers, runs and saved rows, preview changes,
+  and clean rows you already have. It cannot spend credits or change anything.
+- **Full key (`LLM_FULL`)** can also run the paid data tools and build, run and change scrapers.
 
 ## Connect
 
 Replace `YOUR_SCRAPEWISE_API_KEY` in every snippet below.
 
-These snippets connect to the short list of data tools. To build scrapers as well, use this address
-in the same place:
-
-```
-https://mcp.scrapewise.ai/mcp?toolsets=outcome,admin
-```
-
-An account that gets its first MCP key now sees only the short list at the bare address. Accounts
-that still hold an older MCP key keep every tool. The choice is read when the session starts, so
-reconnect after changing it. Spell it `toolsets`: a misspelt switch is ignored without an error.
-
 ### Claude Code
 
 ```bash
 claude mcp add scrapewise --transport http https://mcp.scrapewise.ai/mcp \
-  --header 'Authorization: Bearer YOUR_SCRAPEWISE_API_KEY'
-```
-
-With the setup tools. The single quotes are needed: in zsh an unquoted `?` breaks the command.
-
-```bash
-claude mcp add scrapewise --transport http 'https://mcp.scrapewise.ai/mcp?toolsets=outcome,admin' \
   --header 'Authorization: Bearer YOUR_SCRAPEWISE_API_KEY'
 ```
 
@@ -71,7 +62,7 @@ claude mcp add scrapewise --transport http 'https://mcp.scrapewise.ai/mcp?toolse
 
 ### Cursor
 
-Same shape, in `~/.cursor/mcp.json`:
+Use the **Add to Cursor** button above, or put the same block in `~/.cursor/mcp.json`:
 
 ```json
 {
@@ -88,11 +79,8 @@ Same shape, in `~/.cursor/mcp.json`:
 
 ### VS Code
 
-VS Code is the odd one out: the map is `servers`, not `mcpServers`, and a remote server has to
-name its transport with `"type": "http"`. Get either wrong and VS Code skips the entry without
-telling you.
-
-Open the Command Palette → **MCP: Open User Configuration**, then:
+Use the **Add to VS Code** button above, or open the Command Palette, run
+**MCP: Open User Configuration** and add:
 
 ```json
 {
@@ -108,126 +96,78 @@ Open the Command Palette → **MCP: Open User Configuration**, then:
 }
 ```
 
-### Anything else
+VS Code uses `servers`, not `mcpServers`, and needs `"type": "http"`. If either is wrong, VS Code
+skips the entry without an error.
 
-Any client that speaks Streamable HTTP works. Give it the endpoint, the `Authorization` header,
-and the name `scrapewise`.
+### Gemini CLI
+
+```bash
+gemini mcp add --transport http scrapewise https://mcp.scrapewise.ai/mcp \
+  --header "Authorization: Bearer YOUR_SCRAPEWISE_API_KEY"
+```
+
+Or install this repository as an extension. It asks for your key and keeps it out of the config file:
+
+```bash
+gemini extensions install https://github.com/BEBOTECH-OU/scrapewise-mcp
+```
+
+### LM Studio
+
+Open **Program > Edit mcp.json** and add:
+
+```json
+{
+  "mcpServers": {
+    "scrapewise": {
+      "url": "https://mcp.scrapewise.ai/mcp",
+      "headers": {
+        "Authorization": "Bearer YOUR_SCRAPEWISE_API_KEY"
+      }
+    }
+  }
+}
+```
+
+### Any other client
+
+Any client that speaks Streamable HTTP works. Give it the endpoint, the `Authorization` header and
+the name `scrapewise`.
 
 ## What your agent can do
 
-| Area | What it covers |
-| --- | --- |
-| Products | Product rows from any shop: name, price, currency, availability, brand, SKU/GTIN/EAN, images, description, rating. Amazon product pages, optionally with every seller's price, condition and delivery |
-| Clean | Tidy rows you already have: add EUR prices and price per kg/litre/piece, trim text, drop duplicates. Free — nothing is fetched |
-| Find | Local businesses from Google Maps: name, address, phone, website, rating (up to 20 per call) |
-| Search | Google web, news and shopping results; Amazon search results; Google Trends over time |
-| Fetch | The text or HTML of one public web page |
-| Follow | Long jobs: progress, rows, cancel |
-| Read | The groups in your account and the rows saved in them |
+| Area | What it covers | Key |
+| --- | --- | --- |
+| Products | Product rows from any shop: name, price, currency, availability, brand, SKU/GTIN/EAN, images, description, rating. Amazon product pages, optionally with every seller's price | Full |
+| Find | Local businesses from Google Maps: name, address, phone, website, rating (up to 20 per call). Amazon seller leads. idealo shop offers | Full |
+| Search | Google web, news and shopping results; Amazon search results; Google Trends over time | Full |
+| Fetch | The text or HTML of one public web page | Full |
+| Clean | Tidy rows you already have: EUR prices, price per kg, litre or piece, trimmed text, no duplicates. Free, nothing is fetched | Read |
+| Follow | Long jobs: progress and rows (Read), cancel (Full) | Read |
+| Read | Your groups, scrapers, runs, saved rows, match results and settings | Read |
+| Build and run | Preview a page, create scrapers from a URL or a cURL command, add product links, run and stop scrapers and groups | Full |
+| Rules and monitoring | Group rules (currency, price per unit), price monitoring, schedules, retention, matching setup | Full |
 
-### With the setup tools (`?toolsets=outcome,admin`)
-
-| Area | What it covers |
-| --- | --- |
-| Build | Preview a page, create a scraper from a URL or a cURL command, define the columns to extract |
-| Organise | Group scrapers by project, add product URLs to a scraper's link list, share groups |
-| Run | Run one scraper, a whole group, or an ad-hoc list of URLs; stop a run; read run errors |
-| Read | Pull sample rows, full result sets, run history and per-run columns; export a group |
-| Transform | Group-level post-process rules — currency conversion, quantity normalisation, price per unit |
-| Monitor | Schedules, price monitoring with anchor competitors, data-quality and retention settings |
+Every paid tool states its price and takes `quote_only: true`, which returns the price and your
+wallet balance without spending anything.
 
 ## Tools
 
-The server advertises its own tool list once connected, so this is a reference rather than the
-source of truth. What a given API key sees can differ — by the address you connect to, and by the
-key's own access level. Full documentation at [docs.scrapewise.ai](https://docs.scrapewise.ai).
+The server sends its own tool list when you connect, so that list is always right. On 9 November
+2026 a Read key saw 48 tools and a Full key saw 114.
 
-**Default tools (an account's first key)**
+**Data tools (Full key):** `get_product_data` · `get_amazon_product` · `find_local_businesses` ·
+`amazon_seller_leads` · `idealo_offers` · `google_search` · `search_amazon` · `google_trends` ·
+`fetch_page` · `cancel_job`
 
-`get_product_data` · `get_amazon_product` · `clean_product_data` · `find_local_businesses` ·
-`google_search` · `search_amazon` · `google_trends` · `fetch_page` · `get_results` · `cancel_job` ·
-`scrapewise_get_scraper_group_list` · `scrapewise_get_scraper_data_group_client`
+**Free tools (both keys):** `clean_product_data` · `get_results` and every `scrapewise_get_*`,
+`scrapewise_list_*`, `scrapewise_search_*` and `scrapewise_preview_*` tool.
 
-Every paid tool states its price and takes `quote_only: true`, which returns the price and the
-wallet balance without spending anything. `clean_product_data` is free — it works on rows you
-already have and fetches nothing. A read-only key (LLM_READ) lists only the free tools —
-`get_results`, `clean_product_data` and the two read tools; the paid tools and building need a
-full-access key (LLM_FULL).
+**Setup tools (Full key):** every `scrapewise_create_*`, `scrapewise_update_*`, `scrapewise_run_*`,
+`scrapewise_stop_*`, `scrapewise_cancel_*` and `scrapewise_delete_*` tool. Each delete has a
+`_preview` tool that shows what would go, without deleting anything.
 
-### Setup tools (listed with `?toolsets=admin` or `?toolsets=outcome,admin`)
-
-**Build a scraper**
-
-`scrapewise_preview_scraper_from_url` · `scrapewise_preview_scraper_from_curl` ·
-`scrapewise_preview_scraper_preview_rule` · `scrapewise_create_scraper` ·
-`scrapewise_create_scraper_v2` · `scrapewise_create_file_scraper` ·
-`scrapewise_get_scraper` · `scrapewise_get_scraper_v2` · `scrapewise_get_scraper_list` ·
-`scrapewise_get_scraper_config_parameters` · `scrapewise_update_scraper_schema` ·
-`scrapewise_update_scraper_fallback` · `scrapewise_update_file_scraper_file` ·
-`scrapewise_delete_scraper` · `scrapewise_delete_scraper_preview`
-
-**Organise scrapers and their URLs**
-
-`scrapewise_create_scraper_group` · `scrapewise_get_scraper_group_list` ·
-`scrapewise_delete_scraper_group` · `scrapewise_delete_scraper_group_preview` ·
-`scrapewise_create_scraper_site` · `scrapewise_get_scraper_site` ·
-`scrapewise_get_scraper_site_links` · `scrapewise_update_scraper_site_from_source` ·
-`scrapewise_delete_scraper_site` · `scrapewise_get_scraper_sitemaps` ·
-`scrapewise_get_scraper_shared_group_list` · `scrapewise_list_scraper_shared_group_list` ·
-`scrapewise_update_scraper_shared_group`
-
-**Run**
-
-`scrapewise_run_scraper` · `scrapewise_run_scraper_group` · `scrapewise_run_scraper_url_list` ·
-`scrapewise_run_scraper_data_group` · `scrapewise_run_scraper_sitemaps_harvest` ·
-`scrapewise_stop_scraper` · `scrapewise_stop_scraper_group` ·
-`scrapewise_stop_scraper_shared_group` · `scrapewise_get_scraper_load_history` ·
-`scrapewise_get_scraper_job_errors` · `scrapewise_get_scraper_load_site` ·
-`scrapewise_get_scraper_load_site_content`
-
-**Read the data**
-
-`scrapewise_get_scraper_sample_data` · `scrapewise_get_scraper_data_group` ·
-`scrapewise_get_scraper_data_group_client` · `scrapewise_get_scraper_data_group_categories` ·
-`scrapewise_update_scraper_data_group_category` ·
-`scrapewise_delete_scraper_data_group_category` ·
-`scrapewise_delete_scraper_data_group_category_preview` · `scrapewise_get_run_columns` ·
-`scrapewise_get_run_columns_batch` · `scrapewise_export_scraper_data_group` ·
-`scrapewise_delete_scraper_data` · `scrapewise_delete_scraper_data_preview`
-
-**Clean and convert**
-
-`scrapewise_get_scraper_group_post_process_rules` ·
-`scrapewise_update_scraper_group_post_process_rules` ·
-`scrapewise_update_scraper_group_currency` · `scrapewise_update_scraper_group_ai_control` ·
-`scrapewise_update_scraper_group_data_quality` · `scrapewise_create_customer_schema` ·
-`scrapewise_list_customer_schema` · `scrapewise_delete_customer_schema` ·
-`scrapewise_delete_customer_schema_preview`
-
-**Monitor prices**
-
-`scrapewise_update_scraper_group_price_monitor` ·
-`scrapewise_get_scraper_group_price_monitor_anchor_competitors` ·
-`scrapewise_update_scraper_group_price_monitor_anchor_competitor` ·
-`scrapewise_delete_scraper_group_price_monitor_anchor_competitor` ·
-`scrapewise_list_scraper_group_price_monitor_picks` ·
-`scrapewise_update_scraper_group_price_monitor_pick` ·
-`scrapewise_delete_scraper_group_price_monitor_pick`
-
-**Schedule and retain**
-
-`scrapewise_update_scraper_group_schedule` · `scrapewise_update_scraper_group_start_type` ·
-`scrapewise_update_scraper_group_retention` · `scrapewise_update_scraper_retention`
-
-**Enrichment and SEO fields**
-
-`scrapewise_get_enrichment` · `scrapewise_delete_enrichment` ·
-`scrapewise_list_enrichable_scrapers` · `scrapewise_get_scraper_seo_fields` ·
-`scrapewise_search_scraper_seo_fields`
-
-**Account**
-
-`scrapewise_create_api_key` · `scrapewise_list_api_keys` · `scrapewise_delete_api_key`
+Full documentation: [docs.scrapewise.ai](https://docs.scrapewise.ai).
 
 ## Manifest
 
@@ -246,4 +186,4 @@ Namespace ownership for `ai.scrapewise/*` is proved by the Ed25519 public key pu
 
 ## Licence
 
-MIT — see [LICENSE](./LICENSE). Covers this repository's contents only, not the hosted service.
+MIT, see [LICENSE](./LICENSE). Covers this repository's contents only, not the hosted service.

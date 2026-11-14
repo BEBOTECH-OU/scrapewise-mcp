@@ -46,6 +46,29 @@ claude mcp add scrapewise --transport http https://mcp.scrapewise.ai/mcp \
   --header 'Authorization: Bearer YOUR_SCRAPEWISE_API_KEY'
 ```
 
+### Use with Claude Code
+
+This repository is also a Claude Code plugin. It adds the `scrapewise` MCP server and keeps your key
+out of the config file.
+
+1. Set your key in the shell that starts Claude Code (Read or Full, from **Settings > API Keys**):
+
+   ```bash
+   export SCRAPEWISE_API_KEY=YOUR_SCRAPEWISE_API_KEY
+   ```
+
+2. In Claude Code, add this repository as a marketplace source and install the plugin with `/plugin`:
+
+   ```text
+   /plugin marketplace add BEBOTECH-OU/scrapewise-mcp
+   /plugin install scrapewise
+   ```
+
+   To try it from a local clone without installing, run `claude --plugin-dir ./scrapewise-mcp`.
+
+The plugin sends `Authorization: Bearer ${SCRAPEWISE_API_KEY}` to `https://mcp.scrapewise.ai/mcp`.
+The `claude mcp add` command above works too if you prefer not to use a plugin.
+
 ### Claude Desktop
 
 `claude_desktop_config.json`:

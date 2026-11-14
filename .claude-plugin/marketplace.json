@@ -1,0 +1,29 @@
+{
+  "name": "scrapewise",
+  "owner": {
+    "name": "BEBOTECH OÜ (Scrapewise)",
+    "url": "https://scrapewise.ai"
+  },
+  "metadata": {
+    "description": "Clean, matched, AI-ready product data from any website."
+  },
+  "plugins": [
+    {
+      "name": "scrapewise",
+      "source": "./",
+      "description": "Clean, matched, AI-ready product data from any website.",
+      "version": "0.1.3",
+      "homepage": "https://scrapewise.ai",
+      "license": "MIT",
+      "keywords": [
+        "mcp",
+        "web-scraping",
+        "price-monitoring",
+        "product-data",
+        "e-commerce",
+        "amazon",
+        "google-search"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "name": "scrapewise",
+  "version": "0.1.3",
+  "description": "Clean, matched, AI-ready product data from any website.",
+  "author": {
+    "name": "BEBOTECH OÜ (Scrapewise)",
+    "url": "https://scrapewise.ai"
+  },
+  "homepage": "https://scrapewise.ai",
+  "repository": "https://github.com/BEBOTECH-OU/scrapewise-mcp",
+  "license": "MIT",
+  "keywords": [
+    "mcp",
+    "web-scraping",
+    "price-monitoring",
+    "product-data",
+    "e-commerce",
+    "amazon",
+    "google-search"
+  ],
+  "mcpServers": {
+    "scrapewise": {
+      "type": "http",
+      "url": "https://mcp.scrapewise.ai/mcp",
+      "headers": {
+        "Authorization": "Bearer ${SCRAPEWISE_API_KEY}"
+      }
+    }
+  }
+}

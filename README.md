@@ -21,8 +21,9 @@ After the one-click install, replace `YOUR_SCRAPEWISE_API_KEY` with your own key
 - **Registry name:** `ai.scrapewise/scrapewise` ([official MCP registry](https://registry.modelcontextprotocol.io))
 - **Docs:** [scrapewise.ai/mcp](https://scrapewise.ai/mcp)
 
-This repository holds the connection manifest and the per-client config for that server. The
-server itself is hosted, so there is nothing here to install or run.
+This repository holds the connection manifest, the per-client config for that server, and a small
+optional stdio bridge (`stdio/server.mjs`) for clients and tools that only run local servers. The
+server itself is hosted, so most clients need nothing from here except the address.
 
 ## Get an API key
 
@@ -159,6 +160,34 @@ Open **Program > Edit mcp.json** and add:
 
 Any client that speaks Streamable HTTP works. Give it the endpoint, the `Authorization` header and
 the name `scrapewise`.
+
+### Local stdio bridge (Docker or Node)
+
+For clients that start a local process, this repository has a small stdio server that forwards
+every tool call to `https://mcp.scrapewise.ai/mcp` with your key. It lists the tools without a key,
+but running a tool needs `SCRAPEWISE_API_KEY`. Without a key, each call returns a clear error and
+nothing runs.
+
+```bash
+# Node 20+
+git clone https://github.com/BEBOTECH-OU/scrapewise-mcp && cd scrapewise-mcp
+npm ci --omit=dev
+SCRAPEWISE_API_KEY=YOUR_SCRAPEWISE_API_KEY node stdio/server.mjs
+
+# or Docker (Dockerfile in this repository)
+docker run -i --rm -e SCRAPEWISE_API_KEY=YOUR_SCRAPEWISE_API_KEY <image built from this repo>
+```
+
+Optional: `SCRAPEWISE_MCP_URL` (default `https://mcp.scrapewise.ai/mcp`) and
+`SCRAPEWISE_CATALOG_URL` (default `<host>/.well-known/mcp/tools.json`).
+
+### Public tool list
+
+Anyone can read the tool list, with no key needed, at
+[`https://mcp.scrapewise.ai/.well-known/mcp/tools.json`](https://mcp.scrapewise.ai/.well-known/mcp/tools.json).
+It shows what a Full key sees. The MCP Server Card is at
+[`https://mcp.scrapewise.ai/mcp/server-card`](https://mcp.scrapewise.ai/mcp/server-card).
+The `/mcp` endpoint itself still asks for a key or an OAuth sign-in.
 
 ## What your agent can do
 
